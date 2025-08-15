@@ -8,7 +8,6 @@ func TestReadBankStmtsCSV(t *testing.T) {
 	t.Parallel()
 
 	bankStmtDateLayout := []string{"2006-01-02"}
-	reader := NewReader(nil, bankStmtDateLayout)
 
 	tests := []struct {
 		name      string
@@ -36,7 +35,8 @@ func TestReadBankStmtsCSV(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			txns, err := reader.ReadBankStmtsCSV(tt.filePaths)
+			reader := NewReader(nil, bankStmtDateLayout, tt.filePaths, "")
+			txns, err := reader.ReadBankStmtsCSV()
 			if (err != nil) != tt.wantErr {
 				t.Fatalf("ReadBankStmtsCSV() error = %v, wantErr %v", err, tt.wantErr)
 			}
