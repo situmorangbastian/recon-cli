@@ -13,9 +13,9 @@ import (
 	"github.com/situmorangbastian/recon-cli/internal"
 )
 
-func (r *Reader) ReadBankStmtsCSV(filePaths []string) ([]internal.BankStatement, error) {
+func (r *Reader) ReadBankStmtsCSV() ([]internal.BankStatement, error) {
 	var bankStmts []internal.BankStatement
-	for _, filePath := range filePaths {
+	for _, filePath := range r.bankStmtFilePaths {
 		statements, err := r.readSingleBankStatement(filePath)
 		if err != nil {
 			return nil, fmt.Errorf("ReadBankStmtsCSV: failed to read: %w", err)

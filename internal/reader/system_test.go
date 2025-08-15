@@ -8,7 +8,6 @@ func TestReadSysTxnsCSV(t *testing.T) {
 	t.Parallel()
 
 	sysTxnTimeLayout := []string{"2006-01-02 15:04:05"}
-	reader := NewReader(sysTxnTimeLayout, nil)
 
 	tests := []struct {
 		name      string
@@ -34,7 +33,8 @@ func TestReadSysTxnsCSV(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			txns, err := reader.ReadSysTxnsCSV(tt.filePath)
+			reader := NewReader(sysTxnTimeLayout, nil, nil, tt.filePath)
+			txns, err := reader.ReadSysTxnsCSV()
 			if (err != nil) != tt.wantErr {
 				t.Fatalf("ReadSysTxnsCSV() error = %v, wantErr %v", err, tt.wantErr)
 			}

@@ -13,8 +13,8 @@ import (
 	"github.com/situmorangbastian/recon-cli/internal"
 )
 
-func (r *Reader) ReadSysTxnsCSV(filePath string) ([]internal.Transaction, error) {
-	f, err := os.Open(filePath)
+func (r *Reader) ReadSysTxnsCSV() ([]internal.Transaction, error) {
+	f, err := os.Open(r.sysTxnFilePath)
 	if err != nil {
 		return nil, err
 	}
