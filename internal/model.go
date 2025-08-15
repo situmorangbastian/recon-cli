@@ -17,3 +17,10 @@ type Transaction struct {
 	Type            TransactionType
 	TransactionTime time.Time
 }
+
+type BankStatement struct {
+	UniqueIdentifier string
+	Amount           float64
+	Date             time.Time
+	File             string
+}
