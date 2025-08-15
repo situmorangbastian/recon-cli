@@ -81,7 +81,7 @@ func (r *Reader) ReadSysTxnsCSV(filePath string) ([]internal.Transaction, error)
 
 func (r *Reader) parseSysTxnDateTimeLayout(dateTime string) (time.Time, error) {
 	dateTime = strings.TrimSpace(dateTime)
-	for _, format := range r.SysTxnDateTimeLayout {
+	for _, format := range r.sysTxnDateTimeLayout {
 		if t, err := time.Parse(format, dateTime); err == nil {
 			return t, nil
 		}

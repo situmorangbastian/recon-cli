@@ -1,11 +1,11 @@
 package reader
 
 type Reader struct {
-	SysTxnDateTimeLayout []string
+	sysTxnDateTimeLayout []string
 }
 
-func NewReader(SysTxnDateTimeLayout []string) *Reader {
+func NewReader(sysTxnDateTimeLayout []string) *Reader {
 	return &Reader{
-		SysTxnDateTimeLayout: SysTxnDateTimeLayout,
+		sysTxnDateTimeLayout: sysTxnDateTimeLayout,
 	}
 }
