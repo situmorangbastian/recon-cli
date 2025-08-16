@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/situmorangbastian/recon-cli/internal/reader"
 	"github.com/situmorangbastian/recon-cli/internal/reconcile"
@@ -32,6 +34,7 @@ func main() {
 	bankStmtPath := flag.String("bankstmtpath", "", "comma-separated path files to bank statement (required)")
 	startDate := flag.String("startdate", "", "startdate in YYYY-MM-DD format (required)")
 	endDate := flag.String("enddate", "", "enddate in YYYY-MM-DD format (required)")
+	output := flag.String("output", "", "Output file (optional, default: print to terminal)")
 
 	flag.Parse()
 
@@ -57,7 +60,17 @@ func main() {
 	bankStmtPaths := strings.Split(*bankStmtPath, ",")
 	reader := reader.NewReader(sysTxnDateTimeLayout, bankStmtDateLayout, bankStmtPaths, *systemTxnPath)
 	svc := service.NewService(reader)
-	reconcile.New(svc)
+	reconcile := reconcile.New(svc)
 
-	// TODO: Add reconcile result
+	// TODO: move validate start date end date on reconcile implementation
+	dateStart, _ := time.Parse("2006-01-02", *startDate)
+	dateEnd, _ := time.Parse("2006-01-02", *endDate)
+	result, err := reconcile.Reconcile(dateStart, dateEnd)
+	if err != nil {
+		log.Fatalf("reconciliation failed: %v", err)
+	}
+
+	if *output == "" {
+		result.PrintSummary()
+	}
 }
