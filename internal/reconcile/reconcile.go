@@ -19,7 +19,16 @@ func New(svc *service.Service) *Reconcile {
 	}
 }
 
-func (r *Reconcile) Reconcile(startDate, endDate time.Time) (*ReconcileSummary, error) {
+func (r *Reconcile) Reconcile(startDateStr, endDateStr string) (*ReconcileSummary, error) {
+	startDate, err := time.Parse("2006-01-02", startDateStr)
+	if err != nil {
+		return nil, fmt.Errorf("Reconcile: failed parse start date: %w", err)
+	}
+	endDate, err := time.Parse("2006-01-02", endDateStr)
+	if err != nil {
+		return nil, fmt.Errorf("Reconcile: failed parse end date: %w", err)
+	}
+
 	systemTxns, err := r.svc.FetchSystemTransactions(startDate, endDate)
 	if err != nil {
 		return nil, fmt.Errorf("Reconcile: failed get system transactions: %w", err)

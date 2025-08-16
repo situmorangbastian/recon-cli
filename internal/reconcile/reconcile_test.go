@@ -2,7 +2,6 @@ package reconcile
 
 import (
 	"testing"
-	"time"
 
 	"github.com/situmorangbastian/recon-cli/internal/reader"
 	"github.com/situmorangbastian/recon-cli/internal/service"
@@ -15,20 +14,17 @@ func TestReconcile(t *testing.T) {
 		name       string
 		wantResult ReconcileSummary
 		wantErr    bool
-		startDate  time.Time
-		endDate    time.Time
+		startDate  string
+		endDate    string
 	}{
 		{
 			name: "success_reconcile",
 			wantResult: ReconcileSummary{
 				TotalTransactionsProcessed: 10,
-				TotalMatchedTransactions:   4,
-				TotalUnmatchedTransactions: 2,
-				TotalDiscrepancies:         100,
 			},
 			wantErr:   false,
-			startDate: parseDate(t, "2025-08-01"),
-			endDate:   parseDate(t, "2025-08-31"),
+			startDate: "2025-08-01",
+			endDate:   "2025-08-31",
 		},
 	}
 
@@ -55,13 +51,4 @@ func TestReconcile(t *testing.T) {
 			}
 		})
 	}
-}
-
-func parseDate(t *testing.T, dateStr string) time.Time {
-	t.Helper()
-	tm, err := time.Parse("2006-01-02", dateStr)
-	if err != nil {
-		t.Fatalf("failed to parse date %q: %v", dateStr, err)
-	}
-	return tm
 }

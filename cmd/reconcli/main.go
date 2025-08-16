@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/situmorangbastian/recon-cli/internal/reader"
 	"github.com/situmorangbastian/recon-cli/internal/reconcile"
@@ -62,10 +61,7 @@ func main() {
 	svc := service.NewService(reader)
 	reconcile := reconcile.New(svc)
 
-	// TODO: move validate start date end date on reconcile implementation
-	dateStart, _ := time.Parse("2006-01-02", *startDate)
-	dateEnd, _ := time.Parse("2006-01-02", *endDate)
-	result, err := reconcile.Reconcile(dateStart, dateEnd)
+	result, err := reconcile.Reconcile(*startDate, *endDate)
 	if err != nil {
 		log.Fatalf("reconciliation failed: %v", err)
 	}
