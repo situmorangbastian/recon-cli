@@ -25,6 +25,8 @@ type ReconcileSummary struct {
 	UnmatchedBankTx            map[string][]internal.BankStatement
 	TotalDiscrepancies         float64
 	DiscrepantTransactions     []DiscrepantTransaction
+	StartDate                  string
+	EndDate                    string
 }
 
 func (rs *ReconcileSummary) PrintSummary() {

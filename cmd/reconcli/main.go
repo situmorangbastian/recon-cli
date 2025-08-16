@@ -33,7 +33,7 @@ func main() {
 	bankStmtPath := flag.String("bankstmtpath", "", "comma-separated path files to bank statement (required)")
 	startDate := flag.String("startdate", "", "startdate in YYYY-MM-DD format (required)")
 	endDate := flag.String("enddate", "", "enddate in YYYY-MM-DD format (required)")
-	output := flag.String("output", "", "Output file (optional, default: print to terminal)")
+	output := flag.String("output", "", "Target folder for CSV output (optional, default: print to terminal)")
 
 	flag.Parse()
 
@@ -61,12 +61,18 @@ func main() {
 	svc := service.NewService(reader)
 	reconcile := reconcile.New(svc)
 
-	result, err := reconcile.Reconcile(*startDate, *endDate)
+	resultReconciled, err := reconcile.Reconcile(*startDate, *endDate)
 	if err != nil {
 		log.Fatalf("reconciliation failed: %v", err)
 	}
 
 	if *output == "" {
-		result.PrintSummary()
+		resultReconciled.PrintSummary()
+		return
+	}
+
+	err = reconcile.WriteCSVReport(*resultReconciled, *output)
+	if err != nil {
+		log.Fatalf("write csv report failed: %v", err)
 	}
 }
