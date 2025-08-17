@@ -7,9 +7,9 @@ It detects unmatched and discrepant transactions within a specified date range.
 
 ## Features
 
-- Match transactions by **date** and **amount**
+- Match transactions by **bankfrefno**
 - Supports **multiple bank statement files** (comma-separated)
-- Includes a **1,000 tolerance threshold** for real-world discrepancies
+- Flags discrepancy transactions where bank reference matches but amounts differ.
 - Optional `-output` flag to export result reconcile as csv file
 
 ---
@@ -33,26 +33,3 @@ go run cmd/reconcli/main.go \
 | `-startdate`            | startdate in YYYY-MM-DD format (required)                                |
 | `-enddate`              | enddate in YYYY-MM-DD format (required)                                  |
 | `-output`               | Target folder for CSV output (optional, default: print to terminal)      |
-
----
-
-## Matching Logic
-
-### Match Criteria
-
-1. **Date Match:**
-   System transaction date must exactly match the bank statement date.
-   (Time portion is ignored — dates are truncated to `YYYY-MM-DD`).
-
-2. **Amount Match with Tolerance:**
-   For transactions, a **tolerance threshold of 1,000 is applied:
-   - Accepts small mismatches due to rounding, fees, or currency adjustment.
-
-### Example
-
-| System Transaction | Bank Statement | Difference | Match? |
-|--------------------|----------------|------------|--------|
-| 1000000            | 999200         | 800        | ✅     |
-| 1000000            | 998500         | 1500      | ❌     |
-
----

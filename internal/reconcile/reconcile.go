@@ -68,11 +68,10 @@ func (r *Reconcile) performMatching(systemTxns []internal.Transaction, bankState
 		for j := len(unmatchedBankStmts) - 1; j >= 0; j-- {
 			bankStmt := unmatchedBankStmts[j]
 
-			if r.isMatch(systemTxn, bankStmt) {
+			if systemTxn.BankRefNo == bankStmt.UniqueIdentifier {
 				summary.TotalMatchedTransactions++
-
 				expectedAmount := r.getExpectedBankAmount(systemTxn)
-				if math.Abs(expectedAmount-bankStmt.Amount) > 1 {
+				if math.Abs(expectedAmount-bankStmt.Amount) > 0 {
 					difference := math.Abs(expectedAmount - bankStmt.Amount)
 					summary.TotalDiscrepancies += difference
 
@@ -99,18 +98,6 @@ func (r *Reconcile) performMatching(systemTxns []internal.Transaction, bankState
 	summary.UnmatchedSystemTxn = unmatchedSystemTxns
 	summary.DiscrepantTransactions = discrepantTxs
 	return summary
-}
-
-func (r *Reconcile) isMatch(systemTxn internal.Transaction, bankStmt internal.BankStatement) bool {
-	systemDate := systemTxn.TransactionTime.Truncate(24 * time.Hour)
-	bankDate := bankStmt.Date.Truncate(24 * time.Hour)
-
-	if !systemDate.Equal(bankDate) {
-		return false
-	}
-
-	expectedAmount := r.getExpectedBankAmount(systemTxn)
-	return math.Abs(expectedAmount-bankStmt.Amount) <= 1000
 }
 
 func (r *Reconcile) getExpectedBankAmount(systemTxn internal.Transaction) float64 {
