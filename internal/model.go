@@ -16,6 +16,7 @@ type Transaction struct {
 	Amount          float64
 	Type            TransactionType
 	TransactionTime time.Time
+	BankRefNo       string
 }
 
 type BankStatement struct {
