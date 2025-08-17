@@ -31,7 +31,7 @@ func (r *Reader) ReadSysTxnsCSV() ([]internal.Transaction, error) {
 		indices[strings.ToLower(strings.TrimSpace(col))] = i
 	}
 
-	requiredCols := []string{"trxid", "amount", "type", "transactiontime"}
+	requiredCols := []string{"trxid", "amount", "type", "bankrefno", "transactiontime"}
 	for _, col := range requiredCols {
 		if _, exists := indices[col]; !exists {
 			return nil, fmt.Errorf("ReadSysTxnsCSV: required column '%s' not found in system transactions", col)
@@ -68,6 +68,7 @@ func (r *Reader) ReadSysTxnsCSV() ([]internal.Transaction, error) {
 
 		transaction := internal.Transaction{
 			TrxID:           strings.TrimSpace(record[indices["trxid"]]),
+			BankRefNo:       record[indices["bankrefno"]],
 			Amount:          amount,
 			Type:            txnType,
 			TransactionTime: txnTime,
